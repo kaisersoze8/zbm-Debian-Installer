@@ -16,7 +16,7 @@ __zbmdeb*.sh__
 * tzdata & locales are buggy, not exactly giving the desired results with `noninteractive`, so be aware...
 * Assumes zbmdeb* scripts are mounted on `/media/scripts/` to copy into chroot. Modify accordingly.
 
-__zfsflags.sh__
+__zfs-snapshot-flags.sh__
 * This script is to work with `zfs-auto-snapshot` package. By default, snaphots are all Enabled for all Datasets for all Periods. This creates many unwanted snapshots. A simple script that sets all flags to false, then sets the Wanted Dataset:Period to true.
 * Set the ZKEEP variable for number of snapshots to keep and the ZWANT array for Datasets to auto-snapshot. Same as `zfs set com.sun:auto-snapshot:weekly=true,keep=6 pool/dataset` OR edit each `/etc//cron.<period>/zfs-auto-snapshot` & modify to `--keep=6`
 * See Usage: Take manual snaps of ZWANT Datasets. Take snaps of all OS level (/, /var, /usr/local, etc) Datasets and rollback same in batch - usefull for keeping a fresh / pristine copy of a system. 

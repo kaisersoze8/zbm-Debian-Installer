@@ -1,4 +1,4 @@
-# zfsbootmanager
+# ZBM Debian Installer
 Script to Automate Debian Install on ZFS ROOT with ZFSBootManager
 
 ZFS Boot Manager (ZBM) is the SOTA when it come to ZFS on ROOT in my opinion. This script takes the excellent [documentation provided](https://docs.zfsbootmenu.org/en/v2.3.x/guides/debian/bookworm-uefi.html) and adds several automation layers and configuration options. With thanks to the ZBM team for their input on MBR HDD.

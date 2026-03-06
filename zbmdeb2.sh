@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 source /root/install_vars.sh
 # CHANGE BELOW PARAMETERS BEFORE RUNNING AS "source ./this-script.sh"
 export HOSTNAME="this-pc"

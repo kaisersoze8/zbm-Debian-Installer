@@ -1,20 +1,20 @@
 # ZBM Debian Installer
-Script to Automate Debian Install on ZFS ROOT with ZFSBootManager
+Script to Automate Debian Install on ZFS ROOT with ZFSBootManager. This is the new version with auto-detection of properties like blocksize (ashift) and available HDD, among several other improvements.
 
 ZFS Boot Manager (ZBM) is the SOTA when it come to ZFS on ROOT in my opinion. This script takes the excellent [documentation provided](https://docs.zfsbootmenu.org/en/v2.3.x/guides/debian/bookworm-uefi.html) and adds several automation layers and configuration options. With thanks to the ZBM team for their input on MBR HDD.
 
-There are 2 scripts. The first is to chroot, the second is to install (must be started from within the chrooted environment). The scripts could be combined to one, but it is better to visually confirm critical steps.
+There are 2 scripts. The first is to chroot, the second is to install. Copy both scripts to a folder on the Live CD, be sure to set parameters in zbmdeb2.sh. New version auto-transitions into chrooted environment by reading environment variables saved from first script.
 
-For older BIOS based Hardware, it is advised that an MBR partition should be used since ZBM only works with UEFI and a chainloaded (Syslinux/Grub -> ZBM) is needed for ZBM. Further, Syslinux does not work with GPT Partitions. Grub is not preferred in this case as on package update and the subsequent update-grub command messes with the boot menu.
+For older BIOS based Hardware, it is advised that an MBR partition should be used since ZBM only works with UEFI and a chainloaded (Syslinux/Grub -> ZBM) is needed for ZBM. Further, Syslinux does not work well with ext3/ext4. Grub is not preferred in this case as 'apt update' and the subsequent update-grub command messes with the boot menu.
 
 __zbmdeb*.sh__
 * Please read through the scripts to understand pittfalls and limitations. Assumes a standard HDD partition (3) for ZFS with Boot, Swap, Zpool. You must modify if you want something else.
-* Boot partition uses Vfat32 for UEFI/GPT and Ext4 for BIOS/MBR
+* Boot partition uses Vfat32 for UEFI/GPT and Ext2 for BIOS/MBR
 * It is a misconception that ZFS is inadvisible on LowMemory systems. This is completely dependent on the ZFS ARC (Adaptive Replacement Cache) setting, which this script addresses. Setting the `zfs_arc_max` to 10% (or whatever) of available RAM will make ZFS work on LowMem hardware (see [here](https://forums.freebsd.org/threads/zfs-on-low-end-computer.79062/)). You can also toggle `zfs_prefetch_disable` (Disable ARC), but this produces a slugish system.
-* Distinguishes Sata & Nvme HDD settings.
+* Distinguishes Sata & Nvme HDD settings and auto-detects correct ashift value.
 * Populates `/etc/fstab` entries, with /tmp & /var/tmp mounted as tmpfs with the `noexec` flag (you should be using `noexec` for these folders). `noexec` will prevent script or binary execution from there, so something like `curl <some_http> | bash` will fail since the command fisrt places the file in /tmp.
-* tzdata & locales are buggy, not exactly giving the desired results with `noninteractive`, so be aware...
-* Assumes zbmdeb* scripts are mounted on `/media/scripts/` to copy into chroot. Modify accordingly.
+* tzdata & locales non-interactive have been fixed, as well as the pesky 'ZFS Taints Kernel' prompt.
+* Detects where zbmdeb1.sh is executed from and copies the folder (with your other scripts) into chroot.
 
 __zfs-snapshot-flags.sh__
 * This script is to work with `zfs-auto-snapshot` package. By default, snaphots are all Enabled for all Datasets for all Periods. This creates many unwanted snapshots. A simple script that sets all flags to false, then sets the Wanted Dataset:Period to true.

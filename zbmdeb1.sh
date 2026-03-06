@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 # READ PARAMETERS FROM USER
 read -rp "Set ZFS Pool Name [rpool]: " POOL_NAME
 export POOL_NAME=${POOL_NAME:-rpool}

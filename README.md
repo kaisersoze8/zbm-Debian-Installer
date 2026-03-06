@@ -9,7 +9,7 @@ For older BIOS based Hardware, it is advised that an MBR partition should be use
 
 __zbmdeb*.sh__
 * Please read through the scripts to understand pittfalls and limitations. Assumes a standard HDD partition (3) for ZFS with Boot, Swap, Zpool. You must modify if you want something else.
-* Boot partition uses Vfat32 for UEFI/GPT and Ext2 for BIOS/MBR
+* Boot partition uses Vfat for UEFI/GPT and Ext2 for BIOS/MBR
 * It is a misconception that ZFS is inadvisible on LowMemory systems. This is completely dependent on the ZFS ARC (Adaptive Replacement Cache) setting, which this script addresses. Setting the `zfs_arc_max` to 10% (or whatever) of available RAM will make ZFS work on LowMem hardware (see [here](https://forums.freebsd.org/threads/zfs-on-low-end-computer.79062/)). You can also toggle `zfs_prefetch_disable` (Disable ARC), but this produces a slugish system.
 * Distinguishes Sata & Nvme HDD settings and auto-detects correct ashift value.
 * Populates `/etc/fstab` entries, with /tmp & /var/tmp mounted as tmpfs with the `noexec` flag (you should be using `noexec` for these folders). `noexec` will prevent script or binary execution from there, so something like `curl <some_http> | bash` will fail since the command fisrt places the file in /tmp.
